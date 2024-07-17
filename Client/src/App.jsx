@@ -69,13 +69,6 @@ const App = () => {
     return null;
   };
 
-  useEffect(() => {
-    const winner = checkWinner();
-    if (winner) {
-      setFinishetState(winner);
-    }
-  }, [gameState]);
-
   const showToast = (message) => {
     Toastify({
       text: message,
@@ -105,18 +98,33 @@ const App = () => {
 
   const handleSendMessage = (message) => {
     socket?.emit("messageFromClient", { message });
-    showToast(message); 
+    // showToast(message); 
   };
+
+
 
   useEffect(() => {
     socket?.on("messageFromServer", (data) => {
       showToast(data.message);
     });
 
+    socket?.on("receiveMessage", (message) => {
+      showToast(message);
+    });
+  
     return () => {
       socket?.off("messageFromServer");
+      socket?.off('receiveMessage')
+      socket?.disconnect()
     };
   }, [socket]);
+
+  useEffect(() => {
+    const winner = checkWinner();
+    if (winner) {
+      setFinishetState(winner);
+    }
+  }, [gameState]);
 
   socket?.on("opponentLeftMatch", () => {
     setFinishetState("opponentLeftMatch");
@@ -231,8 +239,8 @@ const App = () => {
         <form onSubmit={(e) => {
           e.preventDefault();
           const message = e.target.elements.message.value;
-          showToast(message);
           e.target.reset(); // Optional: Reset the form after submitting
+          handleSendMessage(message)
         }}>
           <input type="text" name="message" placeholder="Enter your message" />
           <button type="submit">Show Toast</button>
