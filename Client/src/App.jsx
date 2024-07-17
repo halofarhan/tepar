@@ -3,6 +3,8 @@ import "./App.css";
 import Square from "./Square/Square";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 const renderFrom = [
   [1, 2, 3],
@@ -74,6 +76,18 @@ const App = () => {
     }
   }, [gameState]);
 
+  const showToast = (message) => {
+    Toastify({
+      text: message,
+      duration: 3000,
+      close: true,
+      gravity: "top", // top or bottom
+      position: "right", // left, center or right
+      backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+    }).showToast();
+  };
+
   const takePlayerName = async () => {
     const result = await Swal.fire({
       title: "Enter your name",
@@ -88,6 +102,21 @@ const App = () => {
 
     return result;
   };
+
+  const handleSendMessage = (message) => {
+    socket?.emit("messageFromClient", { message });
+    showToast(message); 
+  };
+
+  useEffect(() => {
+    socket?.on("messageFromServer", (data) => {
+      showToast(data.message);
+    });
+
+    return () => {
+      socket?.off("messageFromServer");
+    };
+  }, [socket]);
 
   socket?.on("opponentLeftMatch", () => {
     setFinishetState("opponentLeftMatch");
@@ -127,6 +156,7 @@ const App = () => {
 
     const username = result.value;
     setPlayerName(username);
+    handleSendMessage(`Player ${username} has joined the game`);
 
     const newSocket = io("http://localhost:3000", {
       autoConnect: true,
@@ -143,7 +173,7 @@ const App = () => {
     return (
       <div className="main-div">
         <button onClick={playOnlineClick} className="playOnline">
-          Play Online
+          Lets Play !
         </button>
       </div>
     );
@@ -161,16 +191,14 @@ const App = () => {
     <div className="main-div">
       <div className="move-detection">
         <div
-          className={`left ${
-            currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
-          }`}
+          className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
+            }`}
         >
           {playerName}
         </div>
         <div
-          className={`right ${
-            currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
-          }`}
+          className={`right ${currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
+            }`}
         >
           {opponentName}
         </div>
@@ -198,6 +226,15 @@ const App = () => {
             })
           )}
         </div>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const message = e.target.elements.message.value;
+          showToast(message);
+          e.target.reset(); // Optional: Reset the form after submitting
+        }}>
+          <input type="text" name="message" placeholder="Enter your message" />
+          <button type="submit">Show Toast</button>
+        </form>
         {finishedState &&
           finishedState !== "opponentLeftMatch" &&
           finishedState !== "draw" && (

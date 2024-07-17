@@ -1,15 +1,17 @@
 .main-div {
   display: flex;
+  height: 100vh;
   justify-content: center;
   align-items: center;
   margin-top: 5vh;
   flex-direction: column;
+
 }
 
 .playOnline {
   font-weight: 700;
   border: none;
-  background-color: #e4ca56;
+  background-color: #ECFFE6;
   font-size: 60px;
   cursor: pointer;
   margin-top: 40vh;
@@ -19,7 +21,7 @@
 }
 
 .water-background {
-  background-color: #4b495f;
+  background-color: #0A6847;
 }
 
 .game-heading {
@@ -34,13 +36,14 @@
   grid-template-columns: 1fr 1fr 1fr;
   row-gap: 10px;
   column-gap: 10px;
+  box-shadow: 100vh;
 }
 
 .move-detection {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 400px;
+  width: 320px;
 }
 
 .finished-state {
@@ -52,10 +55,8 @@
 .right {
   height: 30px;
   width: 120px;
-  background-color: red;
-  border-bottom-left-radius: 50px;
-  background-color: #4b495f;
-  border-top-right-radius: 50px;
+  background-color: #524C42;
+  border-radius: 5px;
   padding-top: 7px;
   font-size: 18px;
   padding-bottom: 5px;
@@ -76,9 +77,9 @@
 }
 
 .current-move-cross {
-  background-color: #3fa7f0 !important;
+  background-color: #F3CA52 !important;
 }
 
 .current-move-circle {
-  background-color: #dd7f9f !important;
+  background-color: #F3CA52 !important;
 }
