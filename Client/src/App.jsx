@@ -134,6 +134,8 @@ const App = () => {
     setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
   });
 
+
+
   socket?.on("connect", function () {
     setPlayOnline(true);
   });
