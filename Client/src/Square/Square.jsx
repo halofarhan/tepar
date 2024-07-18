@@ -1,17 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Square.css";
 import dylan from "../assets/dylan.png"
 import yoel from "../assets/yoel.png"
-
-const circleSvg = (
-
-    <img height={100} src={dylan} alt="" />
-
-);
-
-const crossSvg = (
-  <img height={100} src={yoel} alt="" />
-);
+import { svgContext } from "../context/SvgContext";
 
 const Square = ({
   gameState,
@@ -27,6 +18,16 @@ const Square = ({
   setCurrentPlayer,
 }) => {
   const [icon, setIcon] = useState(null);
+
+  const {svgSrc,setSvgSrc,svgSrcList} = useContext(svgContext);
+    
+  const circleSvg = (
+    svgSrcList[svgSrc][0]
+  );
+
+  const crossSvg = (
+    svgSrcList[svgSrc][1]
+  );
 
   const clickOnSquare = () => {
     if (playingAs !== currentPlayer) {

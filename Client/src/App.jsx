@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
 import Square from "./Square/Square";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
-import Toastify from 'toastify-js';
-import 'toastify-js/src/toastify.css';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { svgContext } from "./context/SvgContext";
 
 const renderFrom = [
   [1, 2, 3],
@@ -80,8 +81,8 @@ const App = () => {
       backgroundColor: "linear-gradient(to right, #000, #000)",
       stopOnFocus: true, // Prevents dismissing of toast on hover,
       style: {
-        border: "2px solid #B7E7F7"
-      }
+        border: "2px solid #B7E7F7",
+      },
     }).showToast();
   };
 
@@ -102,10 +103,8 @@ const App = () => {
 
   const handleSendMessage = (message) => {
     socket?.emit("messageFromClient", { message });
-    // showToast(message); 
+    // showToast(message);
   };
-
-
 
   useEffect(() => {
     socket?.on("messageFromServer", (data) => {
@@ -118,8 +117,8 @@ const App = () => {
 
     return () => {
       socket?.off("messageFromServer");
-      socket?.off('receiveMessage')
-      socket?.disconnect()
+      socket?.off("receiveMessage");
+      socket?.disconnect();
     };
   }, [socket]);
 
@@ -145,8 +144,6 @@ const App = () => {
     });
     setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
   });
-
-
 
   socket?.on("connect", function () {
     setPlayOnline(true);
@@ -192,9 +189,7 @@ const App = () => {
         <a onClick={playOnlineClick} class="btn-star">
           <span class="top_left"></span>
           <span class="top_right"></span>
-          <span class="title">
-            Lets Play!
-          </span>
+          <span class="title">Lets Play!</span>
           <span class="bottom_left"></span>
           <span class="bottom_right"></span>
         </a>
@@ -210,6 +205,8 @@ const App = () => {
     );
   }
 
+  const { svgSrc, setSvgSrc, svgSrcList } = useContext(svgContext);
+
   return (
     <>
       <a href="https://codepen.io/uiswarup/full/vYPxywO" target="_blank">
@@ -223,20 +220,26 @@ const App = () => {
         </div>
         {/*Dust particle end-*/}
       </a>
-
       <div className="main-div">
+        <div
+          className="left"
+          onClick={() => setSvgSrc(svgSrc === "xo" ? "yoedyl" : "xo")}
+          style={{ margin: "10px" }}
+        >
+          {svgSrcList[svgSrc][2] === "Human" ? "Sign" : "Human"}
+        </div>
         <div className="move-detection">
           <div
-            className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
-              }`}
-          > <div>
-            
-          </div>
+            className={`left ${
+              currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
+            }`}
+          >
             {playerName}
           </div>
           <div
-            className={`right ${currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
-              }`}
+            className={`right ${
+              currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
+            }`}
           >
             {opponentName}
           </div>
@@ -265,14 +268,21 @@ const App = () => {
             )}
           </div>
           <div className="chatbox">
-            <form className="flex justify-center items-center" onSubmit={(e) => {
-              e.preventDefault();
-              const message = e.target.elements.message.value;
-              e.target.reset(); // Optional: Reset the form after submitting
-              handleSendMessage(message)
-            }}>
-              <input className="formchat" type="text" name="message" placeholder="Enter your taunting here" />
-
+            <form
+              className="flex justify-center items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const message = e.target.elements.message.value;
+                e.target.reset(); // Optional: Reset the form after submitting
+                handleSendMessage(message);
+              }}
+            >
+              <input
+                className="formchat"
+                type="text"
+                name="message"
+                placeholder="Enter your taunting here"
+              />
             </form>
           </div>
           {finishedState &&
