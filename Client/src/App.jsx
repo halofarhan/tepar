@@ -104,7 +104,7 @@ const App = () => {
   };
 
   const handleSendMessage = (message) => {
-    socket?.emit("messageFromClient", { message });
+    socket?.broadcast.emit("messageFromClient", { message });
     showToast(message); 
   };
 
