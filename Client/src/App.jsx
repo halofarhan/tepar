@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
 import Square from "./Square/Square";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { svgContext } from "./context/SvgContext";
 
 const renderFrom = [
   [1, 2, 3],
@@ -197,8 +198,13 @@ const App = () => {
     );
   }
 
+  const {svgSrc,setSvgSrc,svgSrcList} = useContext(svgContext);
+
   return (
     <div className="main-div">
+      <div className="left" onClick={() => setSvgSrc(svgSrc === "xo" ? "yoedyl" : "xo")} style={{margin: "10px"}}>
+        {svgSrcList[svgSrc][2] === "Human" ? "Sign" : "Human"}
+      </div>
       <div className="move-detection">
         <div
           className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
