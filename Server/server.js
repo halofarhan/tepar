@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000
 
 const server = createServer(app);
 const io = new Server(server, {
-  cors: ["http://localhost:5174/", "https://tepar.vercel.app/"],
+  cors: ["http://localhost:5174", "https://tepar.vercel.app"],
 });
 
 const allUsers = {};
