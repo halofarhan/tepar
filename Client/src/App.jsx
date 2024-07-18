@@ -300,10 +300,10 @@ const App = () => {
             )}
         </div>
         {!finishedState && opponentName && (
-          <h2>You are playing against {opponentName}</h2>
+          <h2 className="judul">You are playing against {opponentName}</h2>
         )}
         {finishedState && finishedState === "opponentLeftMatch" && (
-          <h2>You won the match, Opponent has left</h2>
+          <h2 className="judul">You won the match, Opponent has left</h2>
         )}
       </div>
     </>
