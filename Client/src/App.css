@@ -32,12 +32,87 @@ body {
 }
 
 .game-heading {
-  padding: 5px 20px;
+  /* padding: 5px 20px;
   border-radius: 5px;
   text-align: center;
   font-size: 40px;
   color: #B7E7F7;
-  text-shadow: #B7E7F7;
+  text-shadow: #B7E7F7; */
+  font-size: 40px;
+  /* line-height: calc(20px + 20vh); */
+/*   text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+    0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092;
+  color: #fccaff; */
+  text-shadow: 0 0 5px #B7E7F7, 0 0 15px #B7E7F7, 0 0 20px #B7E7F7, 0 0 40px #B7E7F7, 0 0 60px #ff0000, 0 0 10px #B7E7F7, 0 0 98px #ff0000;
+    color: #FFF;
+  font-family: "Sacramento", cursive;
+  text-align: center;
+  animation: blink 12s infinite;
+  -webkit-animation: blink 12s infinite;
+}
+
+body {
+  padding: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #222;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 7px,
+    rgba(0, 0, 0, 0.8) 9px,
+    rgba(0, 0, 0, 0.8) 13px,
+    transparent 13px
+  );
+}
+
+@-webkit-keyframes blink {
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+/*     color: #fccaff;
+    text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+      0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092; */
+  text-shadow: 0 0 5px #B7E7F7, 0 0 15px #B7E7F7, 0 0 20px #B7E7F7, 0 0 40px #B7E7F7, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+    color: #FFF;
+  }
+}
+
+@keyframes blink {
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+/*     color: #fccaff;
+    text-shadow: 0 0 5px #f562ff, 0 0 15px #f562ff, 0 0 25px #f562ff,
+      0 0 20px #f562ff, 0 0 30px #890092, 0 0 80px #890092, 0 0 80px #890092; */
+  text-shadow: 0 0 5px #B7E7F7, 0 0 15px #B7E7F7, 0 0 20px #B7E7F7, 0 0 40px #B7E7F7, 0 0 60px #B7E7F7, 0 0 10px #B7E7F7, 0 0 98px #B7E7F7;
+    color: #FFF;
+  }
 }
 
 .square-wrapper {
@@ -64,7 +139,8 @@ body {
 .right {
   height: 30px;
   width: 120px;
-  background-color: #524C42;
+  background-color: transparent;
+  color: #B7E7F7;
   border-radius: 5px;
   padding-top: 7px;
   font-size: 18px;
@@ -86,11 +162,31 @@ body {
 }
 
 .current-move-cross {
-  background-color: #F3CA52 !important;
+  background-color: transparent;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #B7E7F7;
+  border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 2px 2px #B7E7F7;
+  -moz-box-shadow: 0px 2px 2px 2px #B7E7F7;
+  box-shadow: 0px 0px 4px 2px #B7E7F7;
+  --blur: 1.75rem;
+  box-shadow: inset #B7E7F7 0px 0px 60px -12px;;
+  color: #B7E7F7;
 }
 
 .current-move-circle {
-  background-color: #F3CA52 !important;
+  background-color: transparent;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #B7E7F7;
+  border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 2px 2px #B7E7F7;
+  -moz-box-shadow: 0px 2px 2px 2px #B7E7F7;
+  box-shadow: 0px 0px 4px 2px #B7E7F7;
+  --blur: 1.75rem;
+  box-shadow: inset #B7E7F7 0px 0px 60px -12px;;
+  color: #B7E7F7;
 }
 
 .chatbox{

@@ -271,7 +271,7 @@ const App = () => {
               e.target.reset(); // Optional: Reset the form after submitting
               handleSendMessage(message)
             }}>
-              <input className="formchat" type="text" name="message" placeholder="Enter your message" />
+              <input className="formchat" type="text" name="message" placeholder="Enter your taunting here" />
 
             </form>
           </div>
