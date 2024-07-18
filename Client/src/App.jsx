@@ -169,7 +169,7 @@ const App = () => {
     setPlayerName(username);
     handleSendMessage(`Player ${username} has joined the game`);
 
-    const newSocket = io("http://localhost:3000", {
+    const newSocket = io("http://server.tiaraglo.online", {
       autoConnect: true,
     });
 
