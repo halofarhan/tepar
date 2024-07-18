@@ -69,22 +69,19 @@ const App = () => {
     return null;
   };
 
-  useEffect(() => {
-    const winner = checkWinner();
-    if (winner) {
-      setFinishetState(winner);
-    }
-  }, [gameState]);
-
   const showToast = (message) => {
     Toastify({
       text: message,
+      colour: "#000",
       duration: 3000,
       close: true,
       gravity: "top", // top or bottom
       position: "right", // left, center or right
-      backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-      stopOnFocus: true, // Prevents dismissing of toast on hover
+      backgroundColor: "linear-gradient(to right, #000, #000)",
+      stopOnFocus: true, // Prevents dismissing of toast on hover,
+      style: {
+        border: "2px solid #B7E7F7"
+      }
     }).showToast();
   };
 
@@ -104,19 +101,34 @@ const App = () => {
   };
 
   const handleSendMessage = (message) => {
-    socket?.broadcast.emit("messageFromClient", { message });
-    showToast(message); 
+    socket?.emit("messageFromClient", { message });
+    // showToast(message); 
   };
+
+
 
   useEffect(() => {
     socket?.on("messageFromServer", (data) => {
       showToast(data.message);
     });
 
+    socket?.on("receiveMessage", (message) => {
+      showToast(message);
+    });
+
     return () => {
       socket?.off("messageFromServer");
+      socket?.off('receiveMessage')
+      socket?.disconnect()
     };
   }, [socket]);
+
+  useEffect(() => {
+    const winner = checkWinner();
+    if (winner) {
+      setFinishetState(winner);
+    }
+  }, [gameState]);
 
   socket?.on("opponentLeftMatch", () => {
     setFinishetState("opponentLeftMatch");
@@ -174,9 +186,18 @@ const App = () => {
   if (!playOnline) {
     return (
       <div className="main-div">
-        <button onClick={playOnlineClick} className="playOnline">
+        {/* <button onClick={playOnlineClick} className="playOnline">
           Lets Play !
-        </button>
+        </button> */}
+        <a onClick={playOnlineClick} class="btn-star">
+          <span class="top_left"></span>
+          <span class="top_right"></span>
+          <span class="title">
+            Lets Play!
+          </span>
+          <span class="bottom_left"></span>
+          <span class="bottom_right"></span>
+        </a>
       </div>
     );
   }
@@ -190,74 +211,92 @@ const App = () => {
   }
 
   return (
-    <div className="main-div">
-      <div className="move-detection">
-        <div
-          className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
-            }`}
-        >
-          {playerName}
+    <>
+      <a href="https://codepen.io/uiswarup/full/vYPxywO" target="_blank">
+        <header className="top-header"></header>
+        {/*dust particel*/}
+        <div>
+          <div className="starsec" />
+          <div className="starthird" />
+          <div className="starfourth" />
+          <div className="starfifth" />
         </div>
-        <div
-          className={`right ${currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
-            }`}
-        >
-          {opponentName}
+        {/*Dust particle end-*/}
+      </a>
+
+      <div className="main-div">
+        <div className="move-detection">
+          <div
+            className={`left ${currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
+              }`}
+          > <div>
+            
+          </div>
+            {playerName}
+          </div>
+          <div
+            className={`right ${currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
+              }`}
+          >
+            {opponentName}
+          </div>
         </div>
+        <div>
+          <h1 className="game-heading water-background">Tic Tac Toe</h1>
+          <div className="square-wrapper">
+            {gameState.map((arr, rowIndex) =>
+              arr.map((e, colIndex) => {
+                return (
+                  <Square
+                    socket={socket}
+                    playingAs={playingAs}
+                    gameState={gameState}
+                    finishedArrayState={finishedArrayState}
+                    finishedState={finishedState}
+                    currentPlayer={currentPlayer}
+                    setCurrentPlayer={setCurrentPlayer}
+                    setGameState={setGameState}
+                    id={rowIndex * 3 + colIndex}
+                    key={rowIndex * 3 + colIndex}
+                    currentElement={e}
+                  />
+                );
+              })
+            )}
+          </div>
+          <div className="chatbox">
+            <form className="flex justify-center items-center" onSubmit={(e) => {
+              e.preventDefault();
+              const message = e.target.elements.message.value;
+              e.target.reset(); // Optional: Reset the form after submitting
+              handleSendMessage(message)
+            }}>
+              <input className="formchat" type="text" name="message" placeholder="Enter your message" />
+
+            </form>
+          </div>
+          {finishedState &&
+            finishedState !== "opponentLeftMatch" &&
+            finishedState !== "draw" && (
+              <h3 className="finished-state">
+                {finishedState === playingAs ? "You " : finishedState} won the
+                game
+              </h3>
+            )}
+          {finishedState &&
+            finishedState !== "opponentLeftMatch" &&
+            finishedState === "draw" && (
+              <h3 className="finished-state">It's a Draw</h3>
+            )}
+        </div>
+        {!finishedState && opponentName && (
+          <h2>You are playing against {opponentName}</h2>
+        )}
+        {finishedState && finishedState === "opponentLeftMatch" && (
+          <h2>You won the match, Opponent has left</h2>
+        )}
       </div>
-      <div>
-        <h1 className="game-heading water-background">Tic Tac Toe</h1>
-        <div className="square-wrapper">
-          {gameState.map((arr, rowIndex) =>
-            arr.map((e, colIndex) => {
-              return (
-                <Square
-                  socket={socket}
-                  playingAs={playingAs}
-                  gameState={gameState}
-                  finishedArrayState={finishedArrayState}
-                  finishedState={finishedState}
-                  currentPlayer={currentPlayer}
-                  setCurrentPlayer={setCurrentPlayer}
-                  setGameState={setGameState}
-                  id={rowIndex * 3 + colIndex}
-                  key={rowIndex * 3 + colIndex}
-                  currentElement={e}
-                />
-              );
-            })
-          )}
-        </div>
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const message = e.target.elements.message.value;
-          showToast(message);
-          e.target.reset(); // Optional: Reset the form after submitting
-        }}>
-          <input type="text" name="message" placeholder="Enter your message" />
-          <button type="submit">Show Toast</button>
-        </form>
-        {finishedState &&
-          finishedState !== "opponentLeftMatch" &&
-          finishedState !== "draw" && (
-            <h3 className="finished-state">
-              {finishedState === playingAs ? "You " : finishedState} won the
-              game
-            </h3>
-          )}
-        {finishedState &&
-          finishedState !== "opponentLeftMatch" &&
-          finishedState === "draw" && (
-            <h3 className="finished-state">It's a Draw</h3>
-          )}
-      </div>
-      {!finishedState && opponentName && (
-        <h2>You are playing against {opponentName}</h2>
-      )}
-      {finishedState && finishedState === "opponentLeftMatch" && (
-        <h2>You won the match, Opponent has left</h2>
-      )}
-    </div>
+    </>
   );
 };
 

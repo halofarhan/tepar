@@ -59,6 +59,15 @@ io.on("connection", (socket) => {
           ...data,
         });
       });
+
+      currentUser.socket.on("messageFromClient", ({message}) => {
+        console.log(message);
+        currentUser.socket.broadcast.emit("receiveMessage",message)
+      });
+      opponentPlayer.socket.on("messageFromClient", ({message}) => {
+        console.log(message);
+        opponentPlayer.socket.broadcast.emit("receiveMessage", message)
+      })
     } else {
       currentUser.socket.emit("OpponentNotFound");
     }
